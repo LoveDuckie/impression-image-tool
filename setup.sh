@@ -15,6 +15,7 @@ write_header
 
 usage() {
    write_info "setup" "usage - setup"
+   write_info "setup" "./setup.sh [-? or -h] [-v <virtual environment name>"
    exit 1
 }
 
