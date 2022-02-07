@@ -20,6 +20,9 @@ def get_root_path():
 def get_default_config_path() -> str:
     return os.path.join(get_root_path(), ".config")
 
+def get_default_config_filepath() -> str:
+    return os.path.join(get_default_config_path(), "default.ini")
+
 def get_default_logs_path() -> str:
     return os.path.join(get_root_path(), ".logs")
 

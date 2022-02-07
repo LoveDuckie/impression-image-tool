@@ -12,3 +12,4 @@ export CURRENT_SCRIPT_FILENAME=${CURRENT_SCRIPT_FILENAME:-$(basename $0)}
 export CURRENT_SCRIPT_FILENAME_BASE=${CURRENT_SCRIPT_FILENAME%.*}
 source "$SHARED_SCRIPTS_PATH/shared-functions.sh"
 write_header
+

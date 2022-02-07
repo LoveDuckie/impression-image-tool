@@ -1,13 +1,12 @@
+from ast import Tuple
 import os, sys
-from random import choices
 import logging
 from logging.handlers import RotatingFileHandler
 import argparse
-import datetime
-from PIL import Image, ImageDraw, ImageFilter
-from utils import get_default_log_filename, get_default_logs_path, get_tool_name, get_default_assets_path, get_supported_social_media_platforms, log_error_exception
-from configparser import ConfigParser, SafeConfigParser
-from config import Configuration
+from PIL import Image, ImageFilter
+from utils import get_default_config_filepath, get_default_log_filename, get_default_logs_path, \
+    get_tool_name, get_default_assets_path, get_supported_social_media_platforms, log_error_exception
+from configparser import SafeConfigParser
 
 if not os.path.exists(get_default_logs_path()):
     os.makedirs(get_default_logs_path())
@@ -58,15 +57,103 @@ def get_technology_asset_path(technology_name: str) -> str:
         raise ValueError("The name of the technology is invalid or empty")
     return
 
-def get_default_rasterized_logo(prefix: str, name: str) -> str:
+def get_assets_path(prefix: str, name: str) -> str:
+    if prefix is None or prefix == '':
+        raise Exception("The prefix is invalid or null")
     
+    if name is None or name == '':
+        raise Exception("The name is invalid or null")
+    return
+
+def get_default_rasterized_logo(prefix: str, name: str) -> str:
+    """Retrieve the default rasterized logo
+
+    Args:
+        prefix (str): The prefix for the type of asset that is to be retrieved
+        name (str): The name of the technology or programming language to retrieve the asset
+
+    Returns:
+        str: Retrieves the newly rasterized logo
+    """
+    if prefix is None or prefix == '':
+        raise Exception("The prefix is invalid or null")
+    
+    if name is None or name == '':
+        raise Exception("The name is invalid or null")
     return
 
 if parsed_args is None:
     raise Exception("The parsed arguments are invalid or null")
 
+def generate_impression_image(config, found_parsed_args):
+    if config is None:
+        raise Exception("The configuration instance is invalid or null")
+    
+    if found_parsed_args is None:
+        raise Exception("The parsed command-line arguments are invalid or null")
+    
+    impression_background = None
+    
+    try:
+        impression_background = Image.open(parsed_args.background_filepath)
+        if impression_background is None:
+            raise ValueError("The loadd impression image is invalid or null")
+    except Exception as exc:
+        log_error_exception(logger,exc)
+        
+    if not any(parsed_args.technologies) and not any(parsed_args.languages):
+        raise Exception("No technologies or languages were defined")
+        
+    logo_paths = []
+        
+    for technology in found_parsed_args.technologies:
+        logo_paths.append(get_assets_path("technologies", technology))
+        
+    for language in found_parsed_args.lanugages:
+        logo_paths.append(get_assets_path("languages", language))
+    
+    padding_offset = parsed_args.padding * 2
+    max_image_width = impression_background.width - (padding_offset)
+    max_image_height = impression_background.height - (padding_offset)
+    
+    if parsed_args.blur_background == True:
+        impression_background = impression_background.filter(ImageFilter.GaussianBlur(parsed_args.blur_background_amount))
+        
+    total_logos = len(logo_paths)
+    total_logo_spacing = parsed_args.spacing * (total_logos - 1)
+    logo_max_width = (max_image_width / total_logos) - total_logo_spacing
+    logo_max_height = (max_image_height / total_logos) - total_logo_spacing
+        
+    logo_counter = 0
+    
+    pos_x, pos_y = parsed_args.padding
+        
+    for logo_path in parsed_args.technologies:
+        if not os.path.exists(logo_path):
+            raise IOError(f"Failed to find the path \"{logo_path}\"")
+        
+        logger.debug(f"adding logo for technology \"{technology}\"")
+        logo_image_filepath = get_default_rasterized_logo("Technologies", technology)
+        logo_image = Image.open(logo_image_filepath)
+        impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
+        pos_x += parsed_args.spacing
+        ++logo_counter
+    
+    for language in parsed_args.languages:
+        logger.debug(f"adding logo for programming language \"{language}\"")
+        logo_image_filepath = get_default_rasterized_logo("Languages", language)
+        logo_image = Image.open(logo_image_filepath)
+        impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
+        pos_x += parsed_args.spacing
+        ++logo_counter
+
 def main(argv):
-    config_inst = Configuration.load_config("")
+    config_file_path = get_default_config_filepath()
+    if config_file_path is None or config_file_path == '':
+        raise Exception("The configuration filepath is invalid or null")
+    if not os.path.exists(config_file_path):
+        return
+    config_inst = SafeConfigParser.read(get_default_config_filepath());
     if config_inst is None:
         raise ValueError("The configuration file was not loaded")
     
@@ -83,48 +170,12 @@ def main(argv):
     if not os.path.exists(parsed_args.background_filepath):
         logger.error(f'The background image \"{parsed_args.background_filepath}\" does not exist. Terminating.')
         return
-    
+
     try:
-        impression_background = Image.open(parsed_args.background_filepath)
-        if impression_background is None:
-            raise ValueError("The loadd impression image is invalid or null")
+        generate_impression_image(config_inst, parsed_args)
     except Exception as exc:
-        logger.error()
-    
-    padding_offset = parsed_args.padding * 2
-    max_image_width = impression_background.width - (padding_offset)
-    max_image_height = impression_background.height - (padding_offset)
-    
-    if parsed_args.blur_background == True:
-        impression_background = impression_background.filter(ImageFilter.GaussianBlur(parsed_args.blur_background_amount))
-        
-    if not any(parsed_args.technologies) and not any(parsed_args.languages):
-        raise Exception("No technologies or languages were defined")
-    
-    total_logos = len(parsed_args.technologies) + len(parsed_args.languages)
-    total_logo_spacing = parsed_args.spacing * (total_logos - 1)
-    logo_max_width = (max_image_width / total_logos) - total_logo_spacing
-    logo_max_height = (max_image_height / total_logos) - total_logo_spacing
-        
-    logo_counter = 0
-    
-    pos_x, pos_y = parsed_args.padding
-        
-    for technology in parsed_args.technologies:
-        logger.debug(f"adding logo for technology \"{technology}\"")
-        logo_image_filepath = get_default_rasterized_logo("Technologies", technology)
-        logo_image = Image.open(logo_image_filepath)
-        impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
-        pos_x += parsed_args.spacing
-        ++logo_counter
-    
-    for language in parsed_args.languages:
-        logger.debug(f"adding logo for programming language \"{language}\"")
-        logo_image_filepath = get_default_rasterized_logo("Languages", language)
-        logo_image = Image.open(logo_image_filepath)
-        impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
-        pos_x += parsed_args.spacing
-        ++logo_counter
+        pass
+
         
 if __name__ == "__main__":
     try:
