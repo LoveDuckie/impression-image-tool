@@ -1,8 +1,7 @@
 {
-    "Portfolio-Script-Header" :
-    {
+    "Portfolio-Script-Header": {
         "prefix": "scriptheader",
-        "scope": "sh",
+        "scope": "shellscript",
         "description": "The default declarations for all scripts that use shared functions.",
         "body": [
             "#!/bin/bash",
@@ -21,9 +20,9 @@
             "write_header"
         ]
     },
-    "Portfolio-Script-Options" :
-    {
-        "prefix": "scriptoptions",  
+    "Portfolio-Script-Options": {
+        "prefix": "scriptoptions",
+        "scope": "shellscript",
         "body": [
             "while getopts ':$1h?' opt; do",
             "   case \\$opt in",
@@ -41,49 +40,49 @@
             "done"
         ]
     },
-    "Portfolio-Write-Response" :
-    {
+    "Portfolio-Write-Response": {
         "prefix": "wr",
+        "scope": "shellscript",
         "description": "",
         "body": [
             "write_response \"${TM_FILENAME_BASE/(.*)/${1:/downcase}/}\" \"$1\""
         ]
     },
-    "Portfolio-Write-Info" :
-    {
+    "Portfolio-Write-Info": {
         "prefix": "wi",
+        "scope": "shellscript",
         "description": "",
         "body": [
             "write_info \"${TM_FILENAME_BASE/(.*)/${1:/downcase}/}\" \"$1\""
         ]
     },
-    "Portfolio-Write-Error" :
-    {
+    "Portfolio-Write-Error": {
         "prefix": "we",
+        "scope": "shellscript",
         "description": "",
         "body": [
             "write_error \"${TM_FILENAME_BASE/(.*)/${1:/downcase}/}\" \"$1\""
         ]
     },
-    "Portfolio-Write-Success" :
-    {
+    "Portfolio-Write-Success": {
         "prefix": "ws",
+        "scope": "shellscript",
         "description": "",
         "body": [
             "write_success \"${TM_FILENAME_BASE/(.*)/${1:/downcase}/}\" \"$1\""
         ]
     },
-    "Portfolio-Write-Warning" :
-    {
+    "Portfolio-Write-Warning": {
         "prefix": "ww",
+        "scope": "shellscript",
         "description": "",
         "body": [
             "write_warning \"${TM_FILENAME_BASE/(.*)/${1:/downcase}/}\" \"$1\""
         ]
     },
-    "Portfolio-Null-Check" :
-    {
+    "Portfolio-Null-Check": {
         "prefix": "null",
+        "scope": "shellscript",
         "description": "A simple null check",
         "body": [
             "if [ -z \"$1\" ]; then",
