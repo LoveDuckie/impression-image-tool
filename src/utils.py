@@ -42,3 +42,9 @@ def log_error_exception(logger: Logger, exception: Exception):
     if exception is None:
         raise Exception("The exception object is invalid or null")
     pass
+
+def generate_output_path():
+    return
+
+def generate_output_filepath():
+    return

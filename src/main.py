@@ -119,6 +119,8 @@ def generate_impression_image(config, found_parsed_args):
     if parsed_args.blur_background == True:
         impression_background = impression_background.filter(ImageFilter.GaussianBlur(parsed_args.blur_background_amount))
         
+    impression_background.show()
+        
     total_logos = len(logo_paths)
     total_logo_spacing = parsed_args.spacing * (total_logos - 1)
     logo_max_width = (max_image_width / total_logos) - total_logo_spacing
@@ -128,26 +130,21 @@ def generate_impression_image(config, found_parsed_args):
     
     pos_x, pos_y = parsed_args.padding
         
-    for logo_path in parsed_args.technologies:
+    for logo_path in logo_paths:
         if not os.path.exists(logo_path):
             raise IOError(f"Failed to find the path \"{logo_path}\"")
         
         logger.debug(f"adding logo for technology \"{technology}\"")
-        logo_image_filepath = get_default_rasterized_logo("Technologies", technology)
+        # logo_image_filepath = get_default_rasterized_logo("Technologies", technology)
+        logo_image_filepath = None
         logo_image = Image.open(logo_image_filepath)
         impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
         pos_x += parsed_args.spacing
         ++logo_counter
-    
-    for language in parsed_args.languages:
-        logger.debug(f"adding logo for programming language \"{language}\"")
-        logo_image_filepath = get_default_rasterized_logo("Languages", language)
-        logo_image = Image.open(logo_image_filepath)
-        impression_background.paste(logo_image, (pos_x, pos_y), logo_image)
-        pos_x += parsed_args.spacing
-        ++logo_counter
+        
+    impression_background.save()
 
-def main(argv):
+def main(argv: list):
     config_file_path = get_default_config_filepath()
     if config_file_path is None or config_file_path == '':
         raise Exception("The configuration filepath is invalid or null")
