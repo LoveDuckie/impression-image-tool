@@ -22,8 +22,8 @@ fi
 
 # Check if the user has provided a directory or file as an argument
 if [ -z "$1" ]; then
-  write_info "run_format" "Usage: $0 <directory-or-file>"
-  exit 1
+    write_info "run_format" "Usage: $0 <directory-or-file>"
+    exit 1
 fi
 
 # Run black on the specified directory or file
@@ -31,10 +31,10 @@ black $1
 
 # Exit status check
 if [ $? -eq 0 ]; then
-  write_info "run_format" "Formatting completed successfully!"
+    write_info "run_format" "Formatting completed successfully!"
 else
-  write_info "run_format" "Formatting failed. Please check for errors."
-  exit 1
+    write_info "run_format" "Formatting failed. Please check for errors."
+    exit 1
 fi
 write_success "run_format" "Done"
 exit 0

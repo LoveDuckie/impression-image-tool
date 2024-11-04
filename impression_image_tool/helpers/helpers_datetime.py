@@ -1,3 +1,7 @@
+"""
+
+"""
+
 def get_time_formatted() -> str:
     """
     Get the formatted time stamp

@@ -1,19 +1,19 @@
 [tool.poetry]
-name = "python-tool-template"
+name = "impression-image-tool"
 version = "0.1.0"
 description = "A template repository for building tools in Python"
 readme = "README.md"
 authors = ["Luc Shelton <lucshelton@gmail.com>"]
-homepage = "https://github.com/loveduckie/python-tool-template"
-repository = "https://github.com/loveduckie/python-tool-template"
-documentation = "https://github.com/loveduckie/python-tool-template/-/wikis/home"
+homepage = "https://github.com/loveduckie/impression-image-tool"
+repository = "https://github.com/loveduckie/impression-image-tool"
+documentation = "https://github.com/loveduckie/impression-image-tool/-/wikis/home"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ]
 packages = [
-    { include = "python_tool_template" },
-    { include = "python_tool_template_tests" }
+    { include = "impression_image_tool" },
+    { include = "impression_image_tool_tests" }
 ]
 
 [tool.poetry.dependencies]
@@ -23,8 +23,10 @@ rich-click = "^1.8.3"
 click = "^8.1.7"
 
 
+cairosvg = "^2.7.1"
+pillow = "^11.0.0"
 [tool.poetry.scripts]
-python-tool-template = 'python_tool_template.__main__:cli'
+imp-tool = 'impression_image_tool.__main__:cli'
 
 [tool.black]
 line-length = 100
@@ -57,6 +59,6 @@ coverage = "^7.6.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.poetry_bumpversion.file."python_tool_template/__init__.py"]
+[tool.poetry_bumpversion.file."impression_image_tool/__init__.py"]
 search = '__version__ = "{current_version}"'
 replace = '__version__ = "{new_version}"'

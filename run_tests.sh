@@ -22,8 +22,8 @@ fi
 
 # Check if the user provided a directory or file to test
 if [ -z "$1" ]; then
-  write_info "run_tests" "Usage: $0 <test-directory-or-file>"
-  exit 1
+    write_info "run_tests" "Usage: $0 <test-directory-or-file>"
+    exit 1
 fi
 
 # Run the unit tests with coverage
@@ -31,10 +31,10 @@ poetry run coverage run --source=. -m unittest discover -s $1
 
 # Check if the tests passed
 if [ $? -eq 0 ]; then
-  write_info "run_tests" "Unit tests passed."
+    write_info "run_tests" "Unit tests passed."
 else
-  write_error "run_tests" "Some unit tests failed. Please review the errors."
-  exit 1
+    write_error "run_tests" "Some unit tests failed. Please review the errors."
+    exit 1
 fi
 
 # Generate coverage report
