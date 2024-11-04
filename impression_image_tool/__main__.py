@@ -70,7 +70,7 @@ def create_logo_grid(input_folder, canvas_size=(1000, 1000), logo_size=100, padd
 
 def generate_unique_filename() -> str:
     """
-
+    Generate a unique filename.
     :return:
     """
     return
@@ -90,6 +90,11 @@ def cli(context: click.Context, logos_path: str) -> None:
     if not context:
         raise ValueError("The click context is invalid.")
 
+    if not logos_path:
+        raise ValueError("The absolute path to where the logos are stored is required.")
+    if not os.path.isdir(logos_path):
+        raise IOError("The absolute path to where the logos are stored is invalid.")
+
     context.ensure_object(dict)
     context.obj["LOGOS_PATH"] = logos_path
 
@@ -108,6 +113,10 @@ def cli_generate(context: click.Context, padding: int, logo_size: int, output_pa
     :param context:
     :return:
     """
+    if not context:
+        raise ValueError("The click context is invalid.")
+
+    context.ensure_object(dict)
     # Usage example
     logos_path: str = context.obj["LOGOS_PATH"]
     if not logos_path:
@@ -115,6 +124,11 @@ def cli_generate(context: click.Context, padding: int, logo_size: int, output_pa
     if not os.path.isdir(logos_path):
         raise IOError("The absolute path to where the logos are stored is invalid.")
     input_folder = logos_path  # Set this to the path where SVG logos are stored
+
+    if not output_path:
+        raise ValueError("The absolute path to where generated logos should be stored is required.")
+
+    output_image_filepath = "output_logo.png"
     output_image_path = "output_logo_grid.png"
     canvas_size = (1000, 1000)
     logo_size = 100

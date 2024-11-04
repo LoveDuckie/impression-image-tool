@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/impression_image_tool/data/vectors/devicon" vcs="Git" />
   </component>
 </project>
