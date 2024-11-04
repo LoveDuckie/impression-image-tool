@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "impression-image-tool"
 version = "0.1.0"
-description = "A template repository for building tools in Python"
+description = "A tool for generating impression images for blog posts."
 readme = "README.md"
 authors = ["Luc Shelton <lucshelton@gmail.com>"]
 homepage = "https://github.com/loveduckie/impression-image-tool"

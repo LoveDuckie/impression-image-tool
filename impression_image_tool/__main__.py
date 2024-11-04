@@ -3,6 +3,7 @@ The main CLI application
 """
 import io
 import os
+from distutils.command.install import value
 
 import cairosvg
 import rich_click as click
@@ -75,6 +76,7 @@ def generate_unique_filename() -> str:
     """
     return
 
+
 @click.group(help="The base command-line interface for the tool.")
 @click.option("--logos-path", type=str, help="The absolute path to where the logos are stored.")
 @click.pass_context
@@ -92,10 +94,11 @@ def cli(context: click.Context, logos_path: str) -> None:
     context.obj["LOGOS_PATH"] = logos_path
 
 
-@cli.command(help="Generate a logo.")
+@cli.command("generate", help="Generate a logo.")
 @click.option("--output-path", type=str, help="The absolute path to where generated logos should be stored.")
 @click.option("--logo-size", type=int, help="The uniform size of the logo.")
 @click.option("--padding", type=int, help="The amount to pad the logos by.")
+@click.pass_context
 def cli_generate(context: click.Context, padding: int, logo_size: int, output_path: str) -> None:
     """
     Generate a logo.
@@ -106,7 +109,11 @@ def cli_generate(context: click.Context, padding: int, logo_size: int, output_pa
     :return:
     """
     # Usage example
-    logos_path = context.obj["LOGOS_PATH"]
+    logos_path: str = context.obj["LOGOS_PATH"]
+    if not logos_path:
+        raise ValueError("The absolute path to where the logos are stored is required.")
+    if not os.path.isdir(logos_path):
+        raise IOError("The absolute path to where the logos are stored is invalid.")
     input_folder = logos_path  # Set this to the path where SVG logos are stored
     output_image_path = "output_logo_grid.png"
     canvas_size = (1000, 1000)

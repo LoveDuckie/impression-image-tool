@@ -1,4 +1,4 @@
-# Python Tool Template
+# Impression Image Tool
 
 This repository is a template for creating Python tools with a consistent structure and standard features like linting, testing, and packaging.
 
