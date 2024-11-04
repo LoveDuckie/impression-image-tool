@@ -3,7 +3,6 @@ The main CLI application
 """
 import io
 import os
-from distutils.command.install import value
 
 import cairosvg
 import rich_click as click
@@ -78,7 +77,8 @@ def generate_unique_filename() -> str:
 
 
 @click.group(help="The base command-line interface for the tool.")
-@click.option("--logos-path", type=str, help="The absolute path to where the logos are stored.")
+@click.option("--logos-path", default=os.path.join(os.path.dirname(__file__), "data", "vectors"), type=str,
+              help="The absolute path to where the logos are stored.")
 @click.pass_context
 def cli(context: click.Context, logos_path: str) -> None:
     """
